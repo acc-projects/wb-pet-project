@@ -1,24 +1,6 @@
 # Выгрузка данных с wb
 
-## База данных (railway)
-
-**Хост:** `yamabiko.proxy.rlwy.net`
-
-**База:** `railway`
-
-**Пользователь:** `root`
-
-**Пароль:** `dnpObyWKuBNBTdCoMIFGyWlqxzOAypRD`
-
-**Порт:** `32672`
-
-Тестовый gmail:
-
-email `testprojects179@gmail.com`
-
-Пароль `d7xS3j09`
-
-### Локальный запуск:
+## Локальный запуск:
 ```bash
 cp .env.example .env
 # Настройте .env для Docker
@@ -26,7 +8,7 @@ docker compose up webserver
 docker compose run --rm artisan migrate
 ```
 
-### Примеры команд:
+## Примеры команд:
 **Выгрузка всех таблиц:** `docker compose run --rm artisan wb:fetch-all --limit=10 --dateFrom=2025-10-21 --dateTo=2025-10-22`
 
 **Выгрузка incomes:** `docker compose run --rm artisan wb:fetch-incomes --dateFrom=2025-10-21 --dateTo=2025-10-22 --limit=10`
