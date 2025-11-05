@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-RUN pecl install xdebug && docker-php-ext-enable xdebug
-COPY php.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN apt-get update && apt-get install -y cron
+RUN mkdir -p /var/log/cron
 
 RUN chown -R www-user:www /var/www/myapp
 

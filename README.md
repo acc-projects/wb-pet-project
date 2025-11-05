@@ -4,9 +4,23 @@
 ```bash
 cp .env.example .env
 # Настройте .env для Docker
-docker compose up webserver
+```
+
+### 1.1 Разработка с cron (когда нужно тестировать планировщик)
+```
+docker compose --profile cron up app-webserver cron
+docker compose run --rm composer install
 docker compose run --rm artisan migrate
 ```
+
+### 1.2 Разработка без cron (по умолчанию)
+```
+docker compose up app-webserver
+docker compose run --rm composer install
+docker compose run --rm artisan migrate
+```
+
+
 
 ## Примеры команд:
 **Выгрузка всех таблиц:** `docker compose run --rm artisan wb:fetch-all --limit=10 --dateFrom=2025-10-21 --dateTo=2025-10-22`
