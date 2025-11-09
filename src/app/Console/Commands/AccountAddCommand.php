@@ -98,6 +98,7 @@ class AccountAddCommand extends Command
             $externalId = $account->external_id ?? 'Not set';
 
             $this->info("✅ Account '{$account->name}' created successfully!");
+            $this->line("   ID: {$account->id}");
             $this->line("   Company: {$company->name}");
             $this->line("   API Service: {$apiService->name}");
             $this->line("   External ID: {$externalId}");

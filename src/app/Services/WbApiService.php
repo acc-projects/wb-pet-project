@@ -14,10 +14,13 @@ readonly class WbApiService
         private ApiEntity $entity
     ) {}
 
-    public function fetchAndSaveData(array $params = []): int
+    /**
+     * Выполняем выгрузку и сохранение данных
+     */
+    public function fetchAndSaveDataForAccount(int $accountId, array $params = []): int
     {
         $limit = min(500, (int)($params['limit'] ?? 500));
-        $maxPages = $params['maxPages'] ?? null;
+        $maxPages = $params['maxPages'] ?? 1;
         unset($params['limit'], $params['maxPages']);
 
         $apiData = $this->apiClient->fetchData(
@@ -27,7 +30,7 @@ readonly class WbApiService
             $maxPages
         );
 
-        return $this->dataProcessor->process($this->entity->value, $apiData);
+        return $this->dataProcessor->process($this->entity->value, $apiData, $accountId);
     }
 
     public function getEntity(): ApiEntity

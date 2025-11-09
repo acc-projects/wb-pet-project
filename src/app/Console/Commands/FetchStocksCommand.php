@@ -2,37 +2,43 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Services\Factories\WbApiServiceFactory;
+use App\Enums\ApiEntity;
+use App\Models\Account;
+use App\Services\WbApiAccountService;
 
-class FetchStocksCommand extends Command
+class FetchStocksCommand extends AbstractFetchCommand
 {
     protected $signature = 'wb:fetch-stocks
+                            {account-id : Account ID for data fetching (required)}
                             {--limit=500 : Limit per page (max 500)}
-                            {--max-pages= : Maximum number of pages to fetch}';
+                            {--max-pages=1 : Maximum number of pages to fetch}';
 
-    protected $description = 'Fetch and save stocks from WB API';
+    protected $description = 'Fetch stocks data from Wildberries API for a specific account';
 
-    public function handle(): void
+    protected function getApiEntity(): ApiEntity
     {
-        $this->info('Starting stocks fetch...');
+        return ApiEntity::STOCKS;
+    }
 
-        $service = WbApiServiceFactory::createForStocks();
-
+    /**
+     * Переопределение параметров подготовки для stocks (без параметра dateTo, dateFrom)
+     */
+    protected function prepareFetchParameters(
+        Account $account,
+        WbApiAccountService $accountService,
+        ?string $dateFrom = null,
+        ?string $dateTo = null,
+    ): array {
         $params = [];
 
         $params['dateFrom'] = now()->format('Y-m-d');
 
-        if ($this->option('max-pages')) {
-            $params['maxPages'] = $this->option('max-pages');
-        }
+        return $params;
+    }
 
-        if ($this->option('limit')) {
-            $params['limit'] = $this->option('limit');
-        }
-
-        $savedCount = $service->fetchAndSaveData($params);
-
-        $this->info("Successfully saved {$savedCount} stock records!");
+    protected function displayFetchInfo(array $params, int $limit, ?int $maxPage): void
+    {
+        $this->info("📅 Date: {$params['dateFrom']}");
+        $this->info("📄 Limit: {$limit}, maxPage: {$maxPage}");
     }
 }

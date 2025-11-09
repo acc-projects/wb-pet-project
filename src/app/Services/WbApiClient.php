@@ -10,13 +10,27 @@ use Illuminate\Support\Facades\Log;
 
 class WbApiClient implements ApiClientInterface
 {
-    public function __construct(
-        private string $baseUrl,
-        private string $token
-    ) {}
+    private string $baseUrl;
+    private ?string $token;
+
+    public function __construct(string $baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+        $this->token = null;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
+        return $this;
+    }
 
     public function fetchData(string $endpoint, array $params = [], int $limit = 500, ?int $maxPages = null): array
     {
+        if (!$this->token) {
+            throw new Exception('Token not set for API client');
+        }
+
         $page = 1;
         $maxPages = $maxPages ?? 1;
         $allData = [];

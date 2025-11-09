@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Stock extends Model
 {
     protected $fillable = [
+        'account_id',
         'stock_date',
         'warehouse_name',
         'nm_id',
@@ -26,4 +28,9 @@ class Stock extends Model
         'price' => 'decimal:2',
         'raw_data' => 'array'
     ];
+
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
 }
