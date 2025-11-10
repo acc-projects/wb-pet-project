@@ -29,6 +29,29 @@ services:
             - app
             - db
 
+    cron:
+        profiles: ["cron"]
+        build:
+            context: ./docker/fpm
+            dockerfile: Dockerfile
+            args:
+                - USER_ID=1000
+                - GROUP_ID=1000
+        container_name: app-cron
+        volumes:
+            - ./src:/var/www/myapp
+            - ./docker/cron/logs:/var/log/cron
+            - ./docker/cron/crontab:/etc/cron.d
+        entrypoint: [ ]
+        command: [ "cron", "-f", "-L", "0" ]
+        user: "root"
+        networks:
+            - app-network-test
+        depends_on:
+            - app
+            - db
+        restart: unless-stopped
+
     db:
         image: mysql:latest
         container_name: db

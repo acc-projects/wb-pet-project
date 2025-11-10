@@ -2,43 +2,23 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Services\Factories\WbApiServiceFactory;
+use App\Enums\ApiEntity;
 
-class FetchOrdersCommand extends Command
+class FetchOrdersCommand extends AbstractFetchCommand
 {
-    protected $signature = 'wb:fetch-orders
-                            {--dateFrom= : Start date (Y-m-d)}
-                            {--dateTo= : End date (Y-m-d)}
-                            {--limit=500 : Limit per page (max 500)}
-                            {--max-pages= : Maximum number of pages to fetch}';
+    protected $signature;
+    protected $description;
 
-    protected $description = 'Fetch and save orders from WB API';
-
-    public function handle(): void
+    public function __construct()
     {
-        $this->info('Starting orders fetch...');
+        $this->signature = $this->getSignature();
+        $this->description = $this->getDescription();
 
-        $service = WbApiServiceFactory::createForOrders();
+        parent::__construct();
+    }
 
-        $params = [];
-        if ($this->option('dateFrom')) {
-            $params['dateFrom'] = $this->option('dateFrom');
-        }
-        if ($this->option('dateTo')) {
-            $params['dateTo'] = $this->option('dateTo');
-        }
-
-        if ($this->option('max-pages')) {
-            $params['maxPages'] = $this->option('max-pages');
-        }
-
-        if ($this->option('limit')) {
-            $params['limit'] = $this->option('limit');
-        }
-
-        $savedCount = $service->fetchAndSaveData($params);
-
-        $this->info("Successfully saved {$savedCount} orders!");
+    protected function getApiEntity(): ApiEntity
+    {
+        return ApiEntity::ORDERS;
     }
 }

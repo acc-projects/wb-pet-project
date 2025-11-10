@@ -42,10 +42,10 @@ enum ApiEntity: string
     public function uniqueKeys(): array
     {
         return match($this) {
-            self::ORDERS => ['g_number'],
-            self::SALES => ['sale_id'],
-            self::STOCKS => ['stock_date', 'warehouse_name', 'nm_id'],
-            self::INCOMES => ['income_id', 'nm_id'],
+            self::ORDERS => ['account_id', 'g_number'],
+            self::SALES => ['account_id', 'sale_id'],
+            self::STOCKS => ['account_id', 'stock_date', 'warehouse_name', 'nm_id'],
+            self::INCOMES => ['account_id', 'income_id', 'nm_id'],
         };
     }
 

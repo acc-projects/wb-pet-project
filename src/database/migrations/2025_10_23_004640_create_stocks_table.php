@@ -23,9 +23,9 @@ return new class extends Migration
             $table->decimal('price', 12, 2);
             $table->integer('discount_percent');
 
-            $table->string('supplier_article');
-            $table->string('product_category');
-            $table->string('brand');
+            $table->string('supplier_article')->nullable();
+            $table->string('product_category')->nullable();
+            $table->string('brand')->nullable();
 
             // Сырые данные
             $table->json('raw_data');
